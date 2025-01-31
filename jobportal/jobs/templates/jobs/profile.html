@@ -1,0 +1,16 @@
+{% extends 'jobs/base.html' %}
+
+{% block title %}User  Profile{% endblock %}
+
+{% block content %}
+<h1>User Profile</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.resume.label }}
+        {{ form.resume|add_class:"form-control" }}
+    </div>
+    <button type="submit" class="btn btn-primary">Update Profile</button>
+</form>
+<a href="{% url 'job_list' %}" class="btn btn-link">View Job Listings</a>
+{% endblock %}

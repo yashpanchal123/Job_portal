@@ -1,0 +1,32 @@
+{% extends 'jobs/base.html' %}
+
+{% block title %}Job Listings{% endblock %}
+
+{% block content %}
+<h1>Job Listings</h1>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Company</th>
+        <th>Posted By</th>
+        <th>Posted On</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for job in jobs %}
+    <tr>
+        <td>{{ job.title }}</td>
+        <td>{{ job.company }}</td>
+        <td>{{ job.posted_by.username }}</td>
+        <td>{{ job.created_at }}</td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="4">No jobs available.</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'post_job' %}" class="btn btn-primary">Post a New Job </a>
+{% endblock %}

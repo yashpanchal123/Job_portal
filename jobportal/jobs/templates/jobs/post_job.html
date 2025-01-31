@@ -1,0 +1,30 @@
+{% extends 'jobs/base.html' %}
+
+{% block title %}Post Job{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Post a Job</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="{{ form.title.id_for_label }}">Job Title</label>
+            <input type="text" name="title" id="{{ form.title.id_for_label }}" class="form-control" value="{{ form.title.value|default_if_none:'' }}" required>
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.description.id_for_label }}">Job Description</label>
+            <textarea name="description" id="{{ form.description.id_for_label }}" class="form-control" rows="5" required>{{ form.description.value|default_if_none:'' }}</textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.company.id_for_label }}">Company Name</label>
+            <input type="text" name="company" id="{{ form.company.id_for_label }}" class="form-control" value="{{ form.company.value|default_if_none:'' }}" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Post Job</button>
+    </form>
+    <a href="{% url 'job_list' %}" class="btn btn-link mt-3">View Job Listings</a>
+</div>
+{% endblock %}
