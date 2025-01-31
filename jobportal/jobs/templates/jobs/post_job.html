@@ -5,22 +5,52 @@
 {% block content %}
 <div class="container">
     <h1 class="mb-4">Post a Job</h1>
-    <form method="post" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        
-        <div class="form-group">
-            <label for="{{ form.title.id_for_label }}">Job Title</label>
-            <input type="text" name="title" id="{{ form.title.id_for_label }}" class="form-control" value="{{ form.title.value|default_if_none:'' }}" required>
-        </div>
 
         <div class="form-group">
-            <label for="{{ form.description.id_for_label }}">Job Description</label>
-            <textarea name="description" id="{{ form.description.id_for_label }}" class="form-control" rows="5" required>{{ form.description.value|default_if_none:'' }}</textarea>
+            <label for="{{ form.title.id_for_label }}">Job Title</label>
+            {{ form.title }}  <!-- This will render the field without custom classes -->
         </div>
 
         <div class="form-group">
             <label for="{{ form.company.id_for_label }}">Company Name</label>
-            <input type="text" name="company" id="{{ form.company.id_for_label }}" class="form-control" value="{{ form.company.value|default_if_none:'' }}" required>
+            {{ form.company }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.description.id_for_label }}">Job Description</label>
+            {{ form.description }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.job_type.id_for_label }}">Job Type</label>
+            {{ form.job_type }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.location.id_for_label }}">Location</label>
+            {{ form.location }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.salary.id_for_label }}">Salary</label>
+            {{ form.salary }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.experience.id_for_label }}">Experience</label>
+            {{ form.experience }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.education.id_for_label }}">Education</label>
+            {{ form.education }}
+        </div>
+
+        <div class="form-group">
+            <label for="{{ form.mandatory_skills.id_for_label }}">Mandatory Skills</label>
+            {{ form.mandatory_skills }}
         </div>
 
         <button type="submit" class="btn btn-primary">Post Job</button>

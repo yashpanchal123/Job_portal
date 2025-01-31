@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Job, Profile
-from .forms import JobForm, ProfileForm
+from .forms import JobForm, ProfileForm, ApplicationForm
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 
@@ -59,3 +59,16 @@ def subscribe_to_jobs(request):
             fail_silently=False,
         )
         return redirect('job_list')
+
+
+def apply_job(request, job_id):
+    job = get_object_or_404(Job, id=job_id)  # Fetch the job by ID
+    if request.method == 'POST':
+        form = ApplicationForm(request.POST)  # Create a form instance with POST data
+        if form.is_valid():
+            # Process the application (e.g., save to the database)
+            # You can also send an email notification or any other logic
+            return redirect('job_list')  # Redirect to the job list or a success page
+    else:
+        form = ApplicationForm()  # Create an empty form instance
+    return render(request, 'jobs/apply_job.html', {'job': job, 'form': form})  # Render the apply job template

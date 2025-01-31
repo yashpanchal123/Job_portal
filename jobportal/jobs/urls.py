@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import post_job, job_list, profile, subscribe_to_jobs, home, job_detail
+from .views import post_job, job_list, profile, subscribe_to_jobs, home, job_detail, apply_job
 
 urlpatterns = [
     path('', home, name='home'),
@@ -8,4 +8,5 @@ urlpatterns = [
     path('profile/', profile, name='profile'),
     path('subscribe/', subscribe_to_jobs, name='subscribe_to_jobs'),
     path('job/<int:job_id>/', job_detail, name='job_detail'),
+    path('job/<int:job_id>/apply/', apply_job, name='apply_job'),  # Apply for a job
 ]
