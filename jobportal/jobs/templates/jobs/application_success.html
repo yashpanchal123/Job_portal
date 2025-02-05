@@ -1,0 +1,11 @@
+{% extends 'jobs/base.html' %}
+
+{% block title %}Application Submitted Successfully{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Application Submitted Successfully!</h1>
+    <p>Thank you for applying. We will review your application and get back to you soon.</p>
+    <a href="{% url 'job_list' %}" class="btn btn-primary">Back to Job Listings</a>
+</div>
+{% endblock %}

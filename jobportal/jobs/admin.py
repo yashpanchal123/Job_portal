@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Job, Profile
+from .models import Job, Profile, JobApplication
 
 
 # Register the Job model
@@ -13,3 +13,8 @@ class JobAdmin(admin.ModelAdmin):
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('user',)  # Display the user associated with the profile
+
+
+@admin.register(JobApplication)
+class JobApplicationAdmin(admin.ModelAdmin):
+    list_display = ('job', 'name', 'email', 'cover_letter')

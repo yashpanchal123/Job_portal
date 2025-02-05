@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Job, Profile
+from .models import Job, Profile, JobApplication
 from .forms import JobForm, ProfileForm, ApplicationForm
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
@@ -62,13 +62,23 @@ def subscribe_to_jobs(request):
 
 
 def apply_job(request, job_id):
-    job = get_object_or_404(Job, id=job_id)  # Fetch the job by ID
+    job = get_object_or_404(Job, id=job_id)
     if request.method == 'POST':
-        form = ApplicationForm(request.POST)  # Create a form instance with POST data
+        form = ApplicationForm(request.POST, request.FILES)  # Include files for resume upload
         if form.is_valid():
-            # Process the application (e.g., save to the database)
-            # You can also send an email notification or any other logic
-            return redirect('job_list')  # Redirect to the job list or a success page
+            application = JobApplication(
+                job=job,
+                name=form.cleaned_data['name'],
+                email=form.cleaned_data['email'],
+                resume=form.cleaned_data['resume'],
+                cover_letter=form.cleaned_data['cover_letter']
+            )
+            application.save()  # Save the application to the database
+            return redirect('application_success')  # Redirect to a success page
     else:
-        form = ApplicationForm()  # Create an empty form instance
-    return render(request, 'jobs/apply_job.html', {'job': job, 'form': form})  # Render the apply job template
+        form = ApplicationForm()
+    return render(request, 'jobs/apply_job.html', {'job': job, 'form': form})
+
+
+def application_success(request):
+    return render(request, 'jobs/application_success.html')  # Render the success template
