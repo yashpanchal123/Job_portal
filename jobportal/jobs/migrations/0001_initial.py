@@ -15,29 +15,68 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Job',
+            name="Job",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255)),
-                ('company', models.CharField(max_length=255)),
-                ('description', models.TextField()),
-                ('job_type', models.CharField(choices=[('full_time', 'Full Time'), ('part_time', 'Part Time'), ('contract', 'Contract'), ('internship', 'Internship')], max_length=50)),
-                ('location', models.CharField(max_length=255)),
-                ('salary', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('experience', models.CharField(max_length=100)),
-                ('education', models.CharField(max_length=100)),
-                ('mandatory_skills', models.TextField()),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('posted_by', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("company", models.CharField(max_length=255)),
+                ("description", models.TextField()),
+                (
+                    "job_type",
+                    models.CharField(
+                        choices=[
+                            ("full_time", "Full Time"),
+                            ("part_time", "Part Time"),
+                            ("contract", "Contract"),
+                            ("internship", "Internship"),
+                        ],
+                        max_length=50,
+                    ),
+                ),
+                ("location", models.CharField(max_length=255)),
+                ("salary", models.DecimalField(decimal_places=2, max_digits=10)),
+                ("experience", models.CharField(max_length=100)),
+                ("education", models.CharField(max_length=100)),
+                ("mandatory_skills", models.TextField()),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "posted_by",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Profile',
+            name="Profile",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('resume', models.FileField(blank=True, upload_to='resumes/')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("resume", models.FileField(blank=True, upload_to="resumes/")),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

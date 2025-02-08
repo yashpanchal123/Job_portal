@@ -4,10 +4,10 @@ from django.contrib.auth.models import User
 
 class Job(models.Model):
     JOB_TYPE_CHOICES = [
-        ('full_time', 'Full Time'),
-        ('part_time', 'Part Time'),
-        ('contract', 'Contract'),
-        ('internship', 'Internship'),
+        ("full_time", "Full Time"),
+        ("part_time", "Part Time"),
+        ("contract", "Contract"),
+        ("internship", "Internship"),
     ]
 
     title = models.CharField(max_length=255)
@@ -29,16 +29,16 @@ class Job(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    resume = models.FileField(upload_to='resumes/', blank=True)
+    resume = models.FileField(upload_to="resumes/", blank=True)
 
     def __str__(self):
         return self.user.username
 
 
 class JobApplication(models.Model):
-    job = models.ForeignKey('Job', on_delete=models.CASCADE)  # Link to the job
+    job = models.ForeignKey("Job", on_delete=models.CASCADE)  # Link to the job
     name = models.CharField(max_length=100)
     email = models.EmailField()
-    resume = models.FileField(upload_to='resumes/')  # Path where resumes are stored
+    resume = models.FileField(upload_to="resumes/")  # Path where resumes are stored
     cover_letter = models.TextField(blank=True, null=True)  # Optional cover letter
     submitted_at = models.DateTimeField(auto_now_add=True)  # Timestamp of submission
