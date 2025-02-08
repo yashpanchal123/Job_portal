@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'jobs',
     'widget_tweaks',
+    'rest_framework',
 ]
 
 X_FRAME_OPTIONS = "SAMEORIGIN"

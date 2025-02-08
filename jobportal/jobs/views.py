@@ -1,57 +1,67 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, authenticate, logout
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic import ListView, DetailView, CreateView, View
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.mail import send_mail
+from django.urls import reverse_lazy
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from .models import Job, Profile, JobApplication
 from .forms import JobForm, ProfileForm, ApplicationForm
-from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
 
+# Home view as a class-based ListView
+class HomeView(ListView):
+    model = Job
+    template_name = 'jobs/home.html'
+    context_object_name = 'jobs'
 
-def home(request):
-    jobs = Job.objects.all()  # Fetch all job listings (or filter as needed)
-    return render(request, 'jobs/home.html', {'jobs': jobs})  # Pass jobs to the template
+# Job detail view
+class JobDetailView(DetailView):
+    model = Job
+    template_name = 'jobs/job_detail.html'
+    context_object_name = 'job'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['job'].mandatory_skills_list = context['job'].mandatory_skills.split(",")
+        return context
 
-def job_detail(request, job_id):
-    job = get_object_or_404(Job, id=job_id)
-    job.mandatory_skills_list = job.mandatory_skills.split(",")
-    return render(request, 'jobs/job_detail.html', {'job': job})
+# Posting a job
+class PostJobView(LoginRequiredMixin, CreateView):
+    model = Job
+    form_class = JobForm
+    template_name = 'jobs/post_job.html'
+    success_url = reverse_lazy('job_list')
 
+    def form_valid(self, form):
+        form.instance.posted_by = self.request.user
+        return super().form_valid(form)
 
-@login_required
-def post_job(request):
-    if request.method == 'POST':
-        form = JobForm(request.POST)
-        if form.is_valid():
-            job = form.save(commit=False)
-            job.posted_by = request.user
-            job.save()
-            return redirect('job_list')
-    else:
-        form = JobForm()
-    return render(request, 'jobs/post_job.html', {'form': form})
+# Listing all jobs
+class JobListView(ListView):
+    model = Job
+    template_name = 'jobs/job_list.html'
+    context_object_name = 'jobs'
 
+# Profile management view
+class ProfileView(LoginRequiredMixin, View):
+    template_name = 'jobs/profile.html'
 
-def job_list(request):
-    jobs = Job.objects.all()
-    return render(request, 'jobs/job_list.html', {'jobs': jobs})
+    def get(self, request):
+        form = ProfileForm(instance=request.user.profile)
+        return render(request, self.template_name, {'form': form})
 
-
-@login_required
-def profile(request):
-    if request.method == 'POST':
+    def post(self, request):
         form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if form.is_valid():
             form.save()
             return redirect('profile')
-    else:
-        form = ProfileForm(instance=request.user.profile)
-    return render(request, 'jobs/profile.html', {'form': form})
+        return render(request, self.template_name, {'form': form})
 
-
-def subscribe_to_jobs(request):
-    if request.method == 'POST':
+# Job subscription view
+class SubscribeToJobsView(View):
+    def post(self, request):
         email = request.POST.get('email')
-        # Logic to subscribe user to job notifications
         send_mail(
             'Job Subscription',
             'Thank you for subscribing to job notifications.',
@@ -61,25 +71,32 @@ def subscribe_to_jobs(request):
         )
         return redirect('job_list')
 
+# Job application view
+class ApplyJobView(View):
+    template_name = 'jobs/apply_job.html'
 
-def apply_job(request, job_id):
-    job = get_object_or_404(Job, id=job_id)
-    if request.method == 'POST':
-        form = ApplicationForm(request.POST, request.FILES)  # Include files for resume upload
+    def get(self, request, job_id):
+        job = get_object_or_404(Job, id=job_id)
+        form = ApplicationForm()
+        return render(request, self.template_name, {'job': job, 'form': form})
+
+    def post(self, request, job_id):
+        job = get_object_or_404(Job, id=job_id)
+        form = ApplicationForm(request.POST, request.FILES)
         if form.is_valid():
-            application = JobApplication(
+            JobApplication.objects.create(
                 job=job,
                 name=form.cleaned_data['name'],
                 email=form.cleaned_data['email'],
                 resume=form.cleaned_data['resume'],
                 cover_letter=form.cleaned_data['cover_letter']
             )
-            application.save()  # Save the application to the database
-            return redirect('application_success')  # Redirect to a success page
-    else:
-        form = ApplicationForm()
-    return render(request, 'jobs/apply_job.html', {'job': job, 'form': form})
+            return redirect('application_success')
+        return render(request, self.template_name, {'job': job, 'form': form})
 
+# Application success view
+class ApplicationSuccessView(View):
+    template_name = 'jobs/application_success.html'
 
-def application_success(request):
-    return render(request, 'jobs/application_success.html')  # Render the success template
+    def get(self, request):
+        return render(request, self.template_name)

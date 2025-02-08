@@ -1,13 +1,17 @@
 from django.urls import path
-from .views import post_job, job_list, profile, subscribe_to_jobs, home, job_detail, apply_job, application_success
+from .views import (
+    HomeView, PostJobView, JobListView, ProfileView,
+    SubscribeToJobsView, JobDetailView, ApplyJobView,
+    ApplicationSuccessView
+)
 
 urlpatterns = [
-    path('', home, name='home'),  # Home Page
-    path('post-job/', post_job, name='post_job'),  # To add new job
-    path('jobs/', job_list, name='job_list'),  # getting all jobs
-    path('profile/', profile, name='profile'),
-    path('subscribe/', subscribe_to_jobs, name='subscribe_to_jobs'),  # subscribing user to required job search
-    path('job/<int:job_id>/', job_detail, name='job_detail'),  # for getting particular job with job id
-    path('job/<int:job_id>/apply/', apply_job, name='apply_job'),  # Apply for a job
-    path('application-success/', application_success, name='application_success'),  # Application success page
+    path('', HomeView.as_view(), name='home'),  # Home Page
+    path('post-job/', PostJobView.as_view(), name='post_job'),  # To add new job
+    path('jobs/', JobListView.as_view(), name='job_list'),  # Getting all jobs
+    path('profile/', ProfileView.as_view(), name='profile'),
+    path('subscribe/', SubscribeToJobsView.as_view(), name='subscribe_to_jobs'),  # Subscribing user to job search
+    path('job/<int:pk>/', JobDetailView.as_view(), name='job_detail'),  # Using <int:pk> for DetailView compatibility
+    path('job/<int:job_id>/apply/', ApplyJobView.as_view(), name='apply_job'),  # Apply for a job
+    path('application-success/', ApplicationSuccessView.as_view(), name='application_success'),  # Application success page
 ]
