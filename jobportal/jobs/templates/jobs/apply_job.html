@@ -4,12 +4,60 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1>Apply for {{ job.title }}</h1>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}  <!-- Render the form fields -->
-        <button type="submit" class="btn btn-primary">Submit Application</button>
-    </form>
-    <a href="{% url 'job_list' %}" class="btn btn-link">Back to Job Listings</a>
+    <div class="card shadow-lg p-4">
+        <h1 class="text-center text-primary">Apply for {{ job.title }}</h1>
+        <h5 class="text-muted text-center">{{ job.company }}</h5>
+
+        <form method="POST" enctype="multipart/form-data" class="mt-4">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                {{ form.name.label_tag }}
+                {{ form.name }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.resume.label_tag }}
+                {{ form.resume }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.cover_letter.label_tag }}
+                {{ form.cover_letter }}
+            </div>
+
+            <button type="submit" class="btn btn-success w-100">Submit Application</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <a href="{% url 'job_list' %}" class="btn btn-outline-secondary">← Back to Job Listings</a>
+        </div>
+    </div>
 </div>
+
+<style>
+    .card {
+        max-width: 600px;
+        margin: auto;
+        border-radius: 10px;
+    }
+
+    input, textarea, select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    button {
+        font-size: 18px;
+        padding: 10px;
+    }
+</style>
 {% endblock %}

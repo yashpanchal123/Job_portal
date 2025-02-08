@@ -3,9 +3,15 @@
 {% block title %}Application Submitted Successfully{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1>Application Submitted Successfully!</h1>
-    <p>Thank you for applying. We will review your application and get back to you soon.</p>
-    <a href="{% url 'job_list' %}" class="btn btn-primary">Back to Job Listings</a>
+<div class="container d-flex justify-content-center align-items-center" style="height: 80vh;">
+    <div class="card shadow-lg p-5 text-center" style="max-width: 500px; width: 100%;">
+        <div class="mb-4">
+            <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+        </div>
+        <h1 class="text-success">Success!</h1>
+        <p class="lead">Your application has been submitted successfully.</p>
+        <p>Thank you for applying. We will review your application and get back to you soon.</p>
+        <a href="{% url 'job_list' %}" class="btn btn-primary mt-3">Back to Job Listings</a>
+    </div>
 </div>
 {% endblock %}

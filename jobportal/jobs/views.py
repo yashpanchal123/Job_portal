@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth import login, authenticate, logout
 from .models import Job, Profile, JobApplication
 from .forms import JobForm, ProfileForm, ApplicationForm
 from django.contrib.auth.decorators import login_required
@@ -11,8 +12,9 @@ def home(request):
 
 
 def job_detail(request, job_id):
-    job = get_object_or_404(Job, id=job_id)  # Fetch the job by ID
-    return render(request, 'jobs/job_detail.html', {'job': job})  # Render the job detail template
+    job = get_object_or_404(Job, id=job_id)
+    job.mandatory_skills_list = job.mandatory_skills.split(",")
+    return render(request, 'jobs/job_detail.html', {'job': job})
 
 
 @login_required
@@ -29,7 +31,6 @@ def post_job(request):
     return render(request, 'jobs/post_job.html', {'form': form})
 
 
-# @login_required
 def job_list(request):
     jobs = Job.objects.all()
     return render(request, 'jobs/job_list.html', {'jobs': jobs})

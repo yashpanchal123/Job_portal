@@ -3,44 +3,73 @@
 {% block title %}Home - Job Portal{% endblock %}
 
 {% block content %}
-<div class="jumbotron text-center bg-primary text-white">
-    <h1 class="display-4">Welcome to the Job Portal!</h1>
-    <p class="lead">Your one-stop solution for job listings and applications.</p>
-    <hr class="my-4">
-    <p>Find your dream job or post a job for your company.</p>
-    <a class="btn btn-light btn-lg" href="{% url 'job_list' %}" role="button">View Job Listings</a>
+<!-- Background Styling -->
+<style>
+    body {
+        background: linear-gradient(to right, #eef2f3, #dfe9f3);
+    }
+    .search-container {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .search-container .form-control {
+        border-radius: 50px;
+        padding: 10px 15px;
+    }
+    .search-container .btn {
+        border-radius: 50px;
+        padding: 10px 20px;
+    }
+    .hero-section {
+        text-align: center;
+        padding: 60px 20px;
+    }
+    .job-card {
+        border-radius: 15px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<!-- Search Bar at the Top -->
+<div class="container mt-5">
+    <div class="search-container d-flex align-items-center">
+        <form method="GET" action="{% url 'job_list' %}" class="d-flex w-100">
+            <input type="text" class="form-control me-2" name="title" placeholder="Job Title">
+            <input type="text" class="form-control me-2" name="company" placeholder="Company Name">
+            <button type="submit" class="btn btn-primary">🔍 Search</button>
+        </form>
+    </div>
 </div>
 
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Search for Jobs</h2>
-    <form method="GET" action="{% url 'job_list' %}" class="form-inline justify-content-center">
-        <div class="form-group mx-sm-3 mb-2">
-            <input type="text" class="form-control" name="title" placeholder="Job Title" aria-label="Job Title">
-        </div>
-        <div class="form-group mx-sm-3 mb-2">
-            <input type="text" class="form-control" name="company" placeholder="Company Name" aria-label="Company Name">
-        </div>
-        <button type="submit" class="btn btn-primary mb-2">Search</button>
-    </form>
+<!-- Hero Section -->
+<div class="container hero-section">
+    <h1 class="fw-bold text-primary">🚀 Welcome to the Job Portal!</h1>
+    <p class="lead text-dark">Find your dream job or post a job for your company.</p>
+    <a class="btn btn-primary btn-lg px-4 py-2 mt-3 shadow-sm" href="{% url 'job_list' %}">View Job Listings</a>
 </div>
 
+<!-- Featured Jobs Section -->
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Featured Job Listings</h2>
+    <h2 class="text-center mb-4 fw-bold">🌟 Featured Job Listings</h2>
     <div class="row">
         {% for job in jobs %}
         <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">{{ job.title }}</h5>
+            <div class="card job-card">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold text-primary">{{ job.title }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">{{ job.company }}</h6>
-                    <p class="card-text">{{ job.description|truncatewords:20 }}</p>
-                    <a href="{% url 'job_detail' job.id %}" class="btn btn-primary">View Details</a>
+                    <p class="card-text text-muted">{{ job.description|truncatewords:20 }}</p>
+                    <a href="{% url 'job_detail' job.id %}" class="btn btn-outline-primary rounded-pill">View Details</a>
                 </div>
             </div>
         </div>
         {% empty %}
         <div class="col-12">
-            <p class="text-center">No job listings available at the moment.</p>
+            <p class="text-center text-muted fs-5">No job listings available at the moment.</p>
         </div>
         {% endfor %}
     </div>

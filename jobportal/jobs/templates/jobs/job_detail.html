@@ -3,17 +3,68 @@
 {% block title %}Job Detail - {{ job.title }}{% endblock %}
 
 {% block content %}
+<style>
+    body {
+        background: linear-gradient(to right, #eef2f3, #dfe9f3);
+    }
+    .job-detail-container {
+        max-width: 800px;
+        margin: auto;
+        padding: 30px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .job-detail-container h1 {
+        font-weight: bold;
+        color: #007bff;
+    }
+    .job-detail-container .text-muted {
+        font-size: 1.2rem;
+    }
+    .job-detail-container p {
+        font-size: 1.1rem;
+    }
+    .btn-custom {
+        border-radius: 50px;
+        padding: 10px 20px;
+    }
+    .skills-badge {
+        background-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        margin-right: 5px;
+        display: inline-block;
+    }
+</style>
+
 <div class="container mt-5">
-    <h1>{{ job.title }}</h1>
-    <h4 class="text-muted">{{ job.company }}</h4>
-    <p><strong>Location:</strong> {{ job.location }}</p>
-    <p><strong>Salary:</strong> ${{ job.salary }}</p>
-    <p><strong>Experience:</strong> {{ job.experience }}</p>
-    <p><strong>Education:</strong> {{ job.education }}</p>
-    <p><strong>Mandatory Skills:</strong> {{ job.mandatory_skills }}</p>
-    <h5>Job Description</h5>
-    <p>{{ job.description }}</p>
-    <a href="{% url 'apply_job' job.id %}" class="btn btn-success">Apply Now</a>
-    <a href="{% url 'job_list' %}" class="btn btn-link">Back to Job Listings</a>
+    <div class="job-detail-container">
+        <h1>{{ job.title }}</h1>
+        <h4 class="text-muted">{{ job.company }}</h4>
+        <hr>
+
+        <p><strong>📍 Location:</strong> {{ job.location }}</p>
+        <p><strong>💰 Salary:</strong> ${{ job.salary }}</p>
+        <p><strong>💼 Experience:</strong> {{ job.experience }}</p>
+        <p><strong>🎓 Education:</strong> {{ job.education }}</p>
+
+        <!-- Skills Section with Badges -->
+        <p><strong>🔹 Mandatory Skills:</strong>
+            {% for skill in job.mandatory_skills_list %}
+                <span class="skills-badge">{{ skill }}</span>
+            {% endfor %}
+        </p>
+
+        <h5 class="mt-4 fw-bold">📝 Job Description</h5>
+        <p>{{ job.description }}</p>
+
+        <div class="mt-4">
+            <a href="{% url 'apply_job' job.id %}" class="btn btn-success btn-custom">✅ Apply Now</a>
+            <a href="{% url 'job_list' %}" class="btn btn-outline-primary btn-custom">🔙 Back to Job Listings</a>
+        </div>
+    </div>
 </div>
 {% endblock %}
