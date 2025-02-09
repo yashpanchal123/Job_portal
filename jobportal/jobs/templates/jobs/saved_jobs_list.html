@@ -1,0 +1,37 @@
+{% extends 'jobs/base.html' %}
+
+{% block title %}Saved Jobs{% endblock %}
+
+{% block content %}
+<style>
+    /* Make sure the page takes full height */
+    html, body {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* This pushes content to take up remaining space, keeping the footer at the bottom */
+    .container {
+        flex-grow: 1;
+    }
+</style>
+<div class="container mt-5">
+    <h2 class="text-center fw-bold">📁 Your Saved Jobs</h2>
+    {% if saved_jobs %}
+    <ul class="list-group mt-4">
+        {% for saved_job in saved_jobs %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1 text-primary">{{ saved_job.job.title }}</h5>
+                <p class="mb-1 text-muted">{{ saved_job.job.company }} - {{ saved_job.job.location }}</p>
+            </div>
+            <a href="{% url 'job_detail' saved_job.job.id %}" class="btn btn-outline-primary">View Job</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p class="text-center text-muted mt-4">You haven't saved any jobs yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

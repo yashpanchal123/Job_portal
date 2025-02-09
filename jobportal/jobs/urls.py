@@ -1,5 +1,6 @@
 from django.urls import path
 from .views import (
+    SaveJobView,
     HomeView,
     PostJobView,
     JobListView,
@@ -11,6 +12,8 @@ from .views import (
     SignupView,
     UserLoginView,
     UserLogoutView,
+    SavedJobsListView,
+    AppliedJobsListView
 )
 
 urlpatterns = [
@@ -35,4 +38,8 @@ urlpatterns = [
         ApplicationSuccessView.as_view(),
         name="application_success",
     ),  # Application success page
+    path("job/<int:job_id>/save/", SaveJobView.as_view(), name="save_job"),
+    path("saved-jobs/", SavedJobsListView.as_view(), name="saved_jobs_list"),
+    path("applied-jobs/", AppliedJobsListView.as_view(), name="applied_jobs_list"),
+
 ]

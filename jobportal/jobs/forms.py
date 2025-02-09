@@ -21,7 +21,6 @@ class SignUpForm(UserCreationForm):
         return user
 
 
-
 class JobForm(forms.ModelForm):
     class Meta:
         model = Job

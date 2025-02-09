@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView, DetailView, CreateView, View
@@ -10,7 +11,7 @@ from django.urls import reverse_lazy
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import Job, Profile, JobApplication
+from .models import Job, Profile, JobApplication, SavedJob
 from .forms import JobForm, ProfileForm, ApplicationForm, SignUpForm
 from django.views.generic.edit import FormView
 
@@ -86,8 +87,8 @@ class JobListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = Job.objects.all()
-        title_query = self.request.GET.get('title', '').strip()
-        location_query = self.request.GET.get('Location', '').strip()
+        title_query = self.request.GET.get("title", "").strip()
+        location_query = self.request.GET.get("Location", "").strip()
 
         if title_query:
             queryset = queryset.filter(title__icontains=title_query)
@@ -142,6 +143,7 @@ class ApplyJobView(LoginRequiredMixin, View):
         if form.is_valid():
             JobApplication.objects.create(
                 job=job,
+                user=request.user,
                 name=form.cleaned_data["name"],
                 email=form.cleaned_data["email"],
                 resume=form.cleaned_data["resume"],
@@ -151,9 +153,43 @@ class ApplyJobView(LoginRequiredMixin, View):
         return render(request, self.template_name, {"job": job, "form": form})
 
 
+class AppliedJobsListView(LoginRequiredMixin, View):
+    template_name = "jobs/applied_jobs.html"
+
+    def get(self, request):
+        applied_jobs = JobApplication.objects.filter(user=request.user)
+        return render(request, self.template_name, {"applied_jobs": applied_jobs})
+
+
 # Application success view
 class ApplicationSuccessView(LoginRequiredMixin, View):
     template_name = "jobs/application_success.html"
 
     def get(self, request):
         return render(request, self.template_name)
+
+
+class SaveJobView(LoginRequiredMixin, View):
+    def post(self, request, job_id):
+        if not request.user.is_authenticated:
+            return JsonResponse({"error": "User not authenticated"}, status=401)
+
+        job = get_object_or_404(Job, id=job_id)
+
+        # Toggle save/unsave logic
+        saved_job, created = SavedJob.objects.get_or_create(user=request.user, job=job)
+        if not created:
+            saved_job.delete()
+            return JsonResponse(
+                {"saved": False, "message": "Job removed from saved jobs."}
+            )
+
+        return JsonResponse({"saved": True, "message": "Job saved successfully."})
+
+
+class SavedJobsListView(LoginRequiredMixin, View):
+    template_name = "jobs/saved_jobs_list.html"
+
+    def get(self, request):
+        saved_jobs = SavedJob.objects.filter(user=request.user)
+        return render(request, self.template_name, {"saved_jobs": saved_jobs})

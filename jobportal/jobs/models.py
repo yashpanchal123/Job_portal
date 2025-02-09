@@ -36,9 +36,22 @@ class Profile(models.Model):
 
 
 class JobApplication(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     job = models.ForeignKey("Job", on_delete=models.CASCADE)  # Link to the job
     name = models.CharField(max_length=100)
     email = models.EmailField()
     resume = models.FileField(upload_to="resumes/")  # Path where resumes are stored
     cover_letter = models.TextField(blank=True, null=True)  # Optional cover letter
     submitted_at = models.DateTimeField(auto_now_add=True)  # Timestamp of submission
+
+
+class SavedJob(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    job = models.ForeignKey("Job", on_delete=models.CASCADE)
+    saved_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ("user", "job")  # Prevent duplicate saves
+
+    def __str__(self):
+        return f"{self.user.username} saved {self.job.title}"

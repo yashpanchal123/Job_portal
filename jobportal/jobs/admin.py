@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Job, Profile, JobApplication
+from .models import Job, Profile, JobApplication, SavedJob
 
 
 # Register the Job model
@@ -23,3 +23,8 @@ class ProfileAdmin(admin.ModelAdmin):
 @admin.register(JobApplication)
 class JobApplicationAdmin(admin.ModelAdmin):
     list_display = ("job", "name", "email", "cover_letter")
+
+
+@admin.register(SavedJob)
+class SavedJobAdmin(admin.ModelAdmin):
+    list_display = ("user", "job")

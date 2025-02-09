@@ -1,0 +1,15 @@
+{% extends 'jobs/base.html' %}
+
+{% block title %}Job Saved{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="alert alert-success text-center p-4 rounded">
+        <h2 class="fw-bold text-success">⭐ Job Saved Successfully!</h2>
+        <p class="lead">You have successfully saved <strong>{{ job.title }}</strong> at <strong>{{ job.company
+            }}</strong>.</p>
+        <a href="{% url 'job_detail' job.id %}" class="btn btn-primary mt-3">🔙 Back to Job Details</a>
+        <a href="{% url 'saved_jobs_list' %}" class="btn btn-outline-secondary mt-3">📁 View Saved Jobs</a>
+    </div>
+</div>
+{% endblock %}

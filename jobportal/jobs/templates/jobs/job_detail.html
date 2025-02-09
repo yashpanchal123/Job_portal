@@ -81,11 +81,42 @@
             {% endfor %}
         </ul>
 
-
-        <div class="mt-4">
-            <a href="{% url 'apply_job' job.id %}" class="btn btn-success btn-custom">✅ Apply Now</a>
-            <a href="{% url 'job_list' %}" class="btn btn-outline-primary btn-custom">🔙 Back to Job Listings</a>
+        <div class="mt-4 d-flex">
+            <a href="{% url 'apply_job' job.id %}" class="btn btn-success btn-custom me-3">✅ Apply Now</a>
+            <a href="{% url 'job_list' %}" class="btn btn-outline-primary btn-custom me-3">🔙 Back to Job Listings</a>
+            <!-- Save Job Form -->
+            <button id="save-job-btn" class="btn btn-outline-warning btn-custom">
+                ⭐ Save Job
+            </button>
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById("save-job-btn").addEventListener("click", function() {
+        fetch("{% url 'save_job' job.id %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("Response from server:", data);
+            if (data.saved) {
+                alert("Job saved successfully!");
+            } else {
+                alert("Job removed from saved jobs.");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("Something went wrong!");
+        });
+    });
+</script>
+
+
 {% endblock %}
