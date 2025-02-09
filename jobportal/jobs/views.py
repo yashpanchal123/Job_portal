@@ -84,6 +84,18 @@ class JobListView(LoginRequiredMixin, ListView):
     template_name = "jobs/job_list.html"
     context_object_name = "jobs"
 
+    def get_queryset(self):
+        queryset = Job.objects.all()
+        title_query = self.request.GET.get('title', '').strip()
+        location_query = self.request.GET.get('Location', '').strip()
+
+        if title_query:
+            queryset = queryset.filter(title__icontains=title_query)
+        if location_query:
+            queryset = queryset.filter(location__icontains=location_query)
+
+        return queryset
+
 
 # Profile management view
 class ProfileView(LoginRequiredMixin, View):

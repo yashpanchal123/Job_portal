@@ -73,7 +73,14 @@
         </p>
 
         <h5 class="mt-4 fw-bold">📝 Job Description</h5>
-        <p>{{ job.description }}</p>
+        <ul>
+            {% for line in job.description.splitlines %}
+            {% if line.strip %} {# Ignore empty lines #}
+            <li>{{ line }}</li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+
 
         <div class="mt-4">
             <a href="{% url 'apply_job' job.id %}" class="btn btn-success btn-custom">✅ Apply Now</a>

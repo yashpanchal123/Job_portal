@@ -35,12 +35,17 @@
 </style>
 
 <!-- Search Bar at the Top -->
-<div class="container mt-5">
-    <div class="search-container d-flex align-items-center">
+<div>
+    <div>
         <form method="GET" action="{% url 'job_list' %}" class="d-flex w-100">
-            <input type="text" class="form-control me-2" name="title" placeholder="Job Title">
-            <input type="text" class="form-control me-2" name="company" placeholder="Company Name">
-            <button type="submit" class="btn btn-primary">🔍 Search</button>
+            <input type="text" class="form-control me-2" name="title" placeholder="Job Title"
+                   value="{{ request.GET.title }}">
+            <input type="text" class="form-control me-2" name="location" placeholder="Location"
+                   value="{{ request.GET.location }}">
+
+            <button type="submit" class="btn btn-primary search-btn">
+                <i class="fas fa-search"></i> Search
+            </button>
         </form>
     </div>
 </div>
@@ -63,7 +68,8 @@
                     <h5 class="card-title fw-bold text-primary">{{ job.title }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">{{ job.company }}</h6>
                     <p class="card-text text-muted">{{ job.description|truncatewords:20 }}</p>
-                    <a href="{% url 'job_detail' job.id %}" class="btn btn-outline-primary rounded-pill">View Details</a>
+                    <a href="{% url 'job_detail' job.id %}" class="btn btn-outline-primary rounded-pill">View
+                        Details</a>
                 </div>
             </div>
         </div>
