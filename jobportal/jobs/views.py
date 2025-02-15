@@ -14,7 +14,7 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Job, Profile, JobApplication, SavedJob
 from .forms import JobForm, ProfileForm, ApplicationForm, SignUpForm
 from django.views.generic.edit import FormView
-
+from django.contrib.auth.decorators import login_required
 
 # User Signup View
 class SignupView(FormView):
@@ -38,7 +38,7 @@ class UserLoginView(LoginView):
         return super().form_invalid(form)
 
     def get_success_url(self):
-        return reverse_lazy("job_list")
+        return reverse_lazy("home")
 
 
 # User Logout View
@@ -193,3 +193,9 @@ class SavedJobsListView(LoginRequiredMixin, View):
     def get(self, request):
         saved_jobs = SavedJob.objects.filter(user=request.user)
         return render(request, self.template_name, {"saved_jobs": saved_jobs})
+
+class UserSettingsView(LoginRequiredMixin, View):
+    template_name = "jobs/settings.html"
+
+    def get(self, request):
+        return render(request, self.template_name, {"user": request.user})

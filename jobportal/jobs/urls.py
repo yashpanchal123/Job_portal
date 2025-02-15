@@ -13,7 +13,8 @@ from .views import (
     UserLoginView,
     UserLogoutView,
     SavedJobsListView,
-    AppliedJobsListView
+    AppliedJobsListView,
+    UserSettingsView
 )
 
 urlpatterns = [
@@ -41,5 +42,5 @@ urlpatterns = [
     path("job/<int:job_id>/save/", SaveJobView.as_view(), name="save_job"),
     path("saved-jobs/", SavedJobsListView.as_view(), name="saved_jobs_list"),
     path("applied-jobs/", AppliedJobsListView.as_view(), name="applied_jobs_list"),
-
+    path('settings/', UserSettingsView.as_view(), name='settings')
 ]
